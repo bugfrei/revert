@@ -54,3 +54,36 @@ Nun läuft die App wieder, wir können deployen. Alles erstmal i.o.
 
 Danach könnten wir von `3063898` in Ruhe den Fehler suchen, beheben und neu deployen.
 
+# Noch cooler
+
+wir verschieben Zeile 3 bis Zeile 13
+// Kunde möchte
+...
+}
+
+Also die function und die 5 Aufrufe ans Ende des Codes.
+
+Wir verschieben also den Teil, der im `ba8d09e` Commit den Fehler hat.
+
+Nach dem Verschieben adden und commiten wir
+
+```
+git add .
+git commit -m "Funktion / Call an Ende verschoben"
+```
+
+Nun wieder der `bisect` Ablauf.
+
+Am Ende sehen wir, das der Fehler korrekt aus der `hello` function entfernt wurde. Obwohl diese sich an einer anderen Stelle befindet.
+
+Den function-Call `hello()` können wir nun noch in `hello(jdata)` ändern.
+Die function `hello()` den Parameter `hello(daten)` geben und `console.log(daten)` einfügen.
+
+Oder wir reverten den HEAD (also das Revert reverten) 
+
+```
+git revert HEAD
+```
+
+fügen den Parameter (`function hello(daten)`) und das Argument `hello(jdata)` hinzu.
+
