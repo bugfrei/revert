@@ -12,7 +12,7 @@ Sie funktioniert nicht!
 Wir suchen mit `git bisect` nun den Commit mit dem Fehler:
 
 `git bisect start`
-`git bisect bad 3063698`  -> HEAD Commit, den wir getestet hatten
+`git bisect bad HEAD`  -> HEAD Commit, den wir getestet hatten
 `git bisect good 18e92c7` -> Initial, da hat auf jedenfall alles funktioniert
 
 Nun führen wir `node t.js` aus, funktoniert die App geben wir
