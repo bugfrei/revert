@@ -12,3 +12,9 @@ for(let i = 0; i < 5; i++) {
     hello();
 }
 
+// Nun werden noch Daten erstellt
+
+let data1 = "ABC";
+let data2 = "123";
+
+
