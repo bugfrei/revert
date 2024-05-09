@@ -17,4 +17,9 @@ for(let i = 0; i < 5; i++) {
 let data1 = "ABC";
 let data2 = "123";
 
+// diese Daten sollen in ein JSON-Objekt gepackt werden
+let jdata = {
+    data1: data1,
+    data2: data2
+}
 
