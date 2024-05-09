@@ -7,5 +7,8 @@ function hello() {
     console.log(daten);
 }
 
-hello();
+// Kunde möchte die Hello World Funktion 5 mal ausführen
+for(let i = 0; i < 5; i++) {
+    hello();
+}
 
