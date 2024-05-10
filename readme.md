@@ -110,4 +110,5 @@ Bei einem dritten Fehler wäre dann der BAD Commit vom 2. Fehler wieder der erst
 > Wichtig! Wenn mehrere Commits der im HEAD rückgägig gemachts Fehler beinhalten, dann könnten diese noch den gleichen (bereits behobenen) Fehler werfen.
 > In diesem Fall wäre dies dann aber nicht BAD sondern GOOD, wir suchen ja den neuen Fehler!
 > Kann dieser nicht erkannt werden, da der alte Fehler zum Programmabbruch führt und es gar nicht zum zweiten Fehler kommt. Dann müsste man mittels branch und rebase den Fehlerhaften Commit in alle Commits entfernen!
-> Da solch eine Situation aber eher unwahrscheinlich ist, mache ich kein Beispiel.
+> Solche eine Situation habe ich im Branch `zwei` beschrieben (`git checkout zwei`)
+
