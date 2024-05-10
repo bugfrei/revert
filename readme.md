@@ -62,11 +62,17 @@ Nun haben wir den `4` Branch korrigiergt. Diese Änderungen muss sich nun auf al
 Dies erreichen wir mit einem Rebase
 
 ```
-git checkout main
+git checkout zwei
 git rebase fix
 ```
 
-Nun hat im `main` Branch KEIN Commit mehr den Fehler (außer der Commit, in dem wir den Fehler "eingebaut" haben).
+Anschließend können wir den branch `fix` löschen
+
+```
+git branch -d fix
+```
+
+Nun hat im `zwei` Branch KEIN Commit mehr den Fehler (außer der Commit, in dem wir den Fehler "eingebaut" haben).
 
 Also `5` hat noch den Fehler, aber `1` bis `4` nicht mehr.
 
@@ -80,5 +86,5 @@ git bisect bad HEAD
 
 Dann wieder `node t.js`, `git bisect good` oder `git bisect bad` bis wir den Fehler-Commit gefunden haben.
 
-Dies ist `2fc5a42`. Diesen beseitigen wir wieder mit `git revert ...`. Entweder in einem weiteren `fix`-Branch oder im aktuellsten Commit.
+Dies ist `Weiterer Fehler`.
 
