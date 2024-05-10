@@ -1,114 +1,84 @@
-# bisect & revert
+# Zwei Fehler
 
-## Testen
-Wir sind auf branch "main" und starten die app
+## Problem beim beseitigen des Fehler Nr. 1
 
-```
-node t.js
-```
-
-Sie funktioniert nicht!
-
-## Fehlersuche mit git bisect
-
-Wir suchen mit `git bisect` nun den Commit mit dem Fehler:
+Wenn wir 6 Commits haben
 
 ```
-git bisect start
-git bisect bad HEAD     -> HEAD Commit, den wir getestet hatten
-git bisect good 18e92c7 -> Initial, da hat auf jedenfall alles funktioniert
+1
+2
+3
+4
+5 FEHLER
+6
 ```
 
-Nun führen wir `node t.js` aus, funktoniert die App geben wir
+und der `5` hat einen Fehler. Dann haben wir ihn ja bisher im Commit `1` rückgängig gemacht.
+Dies erstellte einen neuen, fehlerfreien (was Fehler Nr. 1 angeht) Commit.
+
+In den Commits `1` bis `4` war der Fehler aber noch vorhanden:
 
 ```
-git bisect good
+R -FEHLER
+1 FEHLER
+2 FEHLER
+3 FEHLER
+4 FEHLER
+5 FEHLER
+6
 ```
 
-ein, funktioniert sie nicht dann
+`R` ist der Revert-Commit. Also der beseitigte Fehler.
+
+---
+
+## Fehler in allen Commits beseitigen
+
+Hierzu machen wir
+
+1. den Revert NICHT im Commit `1` sondern im Commit vor dem Fehler-Commit. Also im `4`.
+2. Und das nicht im Main-Branch sondern in einem extra Banch. Nennen wir in `fix`
 
 ```
-git bisect bad
+git checkout c2e864d
+git branch fix
+git checkout fix
 ```
 
-Irgendwann wir angezeigt, das `ba8d09e` der Commit mit dem Fehler ist.
+Wir wechseln also in den Commit VOR dem Fehlerhaften Branch (Zeitlich gesehen der danach).
 
-## Fehler entfernen
+In unserem Beispiel wäre es Commit `4`.
 
-Damit die App schnellst möglichst wieder geht, entfernen wir erstmal nur den Fehler.
+Erstellen ein Branch und wechseln in diesen.
 
-```
-git checkout main
-```
-
-Erstmal in den main-Branch wechseln. Die Änderung soll ja direkt in der aktuellen Version der App rückgängig gemacht werden.
+Hier machen wir nun das Revert
 
 ```
 git revert ba8d09e
 ```
 
-Damit erstellen wir einen neuen Commit OHNE die Änderung der Commits, in dem der Fehler war.
-Jetzt haben wir die App im aktuellsten Zustand, jedoch ohne den fehlerhaften Code und das, was der eigentlich machen sollte.
+Nun haben wir den `4` Branch korrigiergt. Diese Änderungen muss sich nun auf alle Branches danach (`3`, `2`, `1`) auswirken!
 
-Nun läuft die App wieder, wir können deployen. Alles erstmal i.o.
-
-Danach könnten wir von `3063898` in Ruhe den Fehler suchen, beheben und neu deployen.
-
-# Noch cooler
-
-wir verschieben Zeile 3 bis Zeile 13
-// Kunde möchte
-...
-}
-
-Also die function und die 5 Aufrufe ans Ende des Codes.
-
-Wir verschieben also den Teil, der im `ba8d09e` Commit den Fehler hat.
-
-Nach dem Verschieben adden und commiten wir
+Dies erreichen wir mit einem Rebase
 
 ```
-git add .
-git commit -m "Funktion / Call an Ende verschoben"
+git checkout main
+git rebase fix
 ```
 
-Nun wieder der `bisect` Ablauf.
+Nun hat im `main` Branch KEIN Commit mehr den Fehler (außer der Commit, in dem wir den Fehler "eingebaut" haben).
 
-Am Ende sehen wir, das der Fehler korrekt aus der `hello` function entfernt wurde. Obwohl diese sich an einer anderen Stelle befindet.
+Also `5` hat noch den Fehler, aber `1` bis `4` nicht mehr.
 
-Den function-Call `hello()` können wir nun noch in `hello(jdata)` ändern.
-Die function `hello()` den Parameter `hello(daten)` geben und `console.log(daten)` einfügen.
-
-Oder wir reverten den HEAD (also das Revert reverten) 
+Nun können wir den zweiten Fehler genauso suchen. Aber trotzdem ist der Commit mit dem Fehler (also die `5`) als `FIRST GOOD` zu betitteln:
 
 ```
-git revert HEAD
+git bisect start
+git bisect good ba8d09e
+git bisect bad HEAD
 ```
 
-fügen den Parameter (`function hello(daten)`) und das Argument `hello(jdata)` hinzu.
+Dann wieder `node t.js`, `git bisect good` oder `git bisect bad` bis wir den Fehler-Commit gefunden haben.
 
-# Mehrere Fehler eingebaut?
-Sollte es nach dem gefundenen Fehler-Commit noch weitere Commits mit Fehler geben, so ist zu beachten das sich der erste GOOD Commit
-
-```
-git bisect good 18e92c7
-```
-
-Was ja der Initial-Commit war auf den Commit verschiebt, der zuvor als erster BAD gefunden wurde. Also der `ba8d09e Add Data-Output in Hello World function`
-
-`git bisect good ba8d09e`
-
-Ansonsten wird immer wieder dieser Commit als Fehlerhaft gefunden. Aber da wir diesen
-
-1. schon als fehlerhaft erkannt haben
-2. mit `git revert` Rückgängig gemacht haben
-
-können wir ihn als `good` angeben und den nächsten Fehler zwischen HEAD und dem rückgängig gemacht Commit suchen.
-
-Bei einem dritten Fehler wäre dann der BAD Commit vom 2. Fehler wieder der erste GOOD Commit. Usw.
-
-> Wichtig! Wenn mehrere Commits der im HEAD rückgägig gemachts Fehler beinhalten, dann könnten diese noch den gleichen (bereits behobenen) Fehler werfen.
-> In diesem Fall wäre dies dann aber nicht BAD sondern GOOD, wir suchen ja den neuen Fehler!
-> Kann dieser nicht erkannt werden, da der alte Fehler zum Programmabbruch führt und es gar nicht zum zweiten Fehler kommt. Dann müsste man mittels branch und rebase den Fehlerhaften Commit in alle Commits entfernen!
-> Solche eine Situation habe ich im Branch `zwei` beschrieben (`git checkout zwei`)
+Dies ist `2fc5a42`. Diesen beseitigen wir wieder mit `git revert ...`. Entweder in einem weiteren `fix`-Branch oder im aktuellsten Commit.
 
