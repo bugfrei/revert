@@ -25,3 +25,8 @@ let jdata = {
 
 // nur ein Kommentar - simuliert weitere Entwicklung OHNE Fehler
 
+Fehler(); // Das hier ist ein Fehler, die Funktion gibt es nicht.
+// Zu diesem Fehler würde es aber nicht kommen, da das 
+// console.log(daten); von oben schon ein Fehler wirft und das
+// Programm abbricht
+
