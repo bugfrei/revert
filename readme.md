@@ -87,3 +87,23 @@ git revert HEAD
 
 fügen den Parameter (`function hello(daten)`) und das Argument `hello(jdata)` hinzu.
 
+# Mehrere Fehler eingebaut?
+Sollte es nach dem gefundenen Fehler-Commit noch weitere Commits mit Fehler geben, so ist zu beachten das sich der erste GOOD Commit
+
+```
+git bisect good 18e92c7
+```
+
+Was ja der Initial-Commit war auf den Commit verschiebt, der zuvor als erster BAD gefunden wurde. Also der `ba8d09e Add Data-Output in Hello World function`
+
+`git bisect good ba8d09e`
+
+Ansonsten wird immer wieder dieser Commit als Fehlerhaft gefunden. Aber da wir diesen
+
+1. schon als fehlerhaft erkannt haben
+2. mit `git revert` Rückgängig gemacht haben
+
+können wir ihn als `good` angeben und den nächsten Fehler zwischen HEAD und dem rückgängig gemacht Commit suchen.
+
+Bei einem dritten Fehler wäre dann der BAD Commit vom 2. Fehler wieder der erste GOOD Commit. Usw.
+
