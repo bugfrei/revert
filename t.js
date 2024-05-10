@@ -33,3 +33,5 @@ Fehler(); // Das hier ist ein Fehler, die Funktion gibt es nicht.
 // noch ein Kommentar, also weitere Entwicklung ohne Fehler
 // Der Zweite Fehler (und auch der Erste) ist aber noch da!
 
+console.log("Fertig");
+
