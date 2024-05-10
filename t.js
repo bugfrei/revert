@@ -23,3 +23,5 @@ let jdata = {
     data2: data2
 }
 
+// nur ein Kommentar - simuliert weitere Entwicklung OHNE Fehler
+
