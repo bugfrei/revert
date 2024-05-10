@@ -30,3 +30,6 @@ Fehler(); // Das hier ist ein Fehler, die Funktion gibt es nicht.
 // console.log(daten); von oben schon ein Fehler wirft und das
 // Programm abbricht
 
+// noch ein Kommentar, also weitere Entwicklung ohne Fehler
+// Der Zweite Fehler (und auch der Erste) ist aber noch da!
+
