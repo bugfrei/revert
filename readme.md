@@ -88,3 +88,11 @@ Dann wieder `node t.js`, `git bisect good` oder `git bisect bad` bis wir den Feh
 
 Dies ist `Weiterer Fehler`.
 
+> Bei den ganzen Reverts kann es durchaus auch zu Konflikten kommen. Gerade dann wenn in dem Bereich des Fehler ein anderer Commit etwas geändert hat.
+> Diese müssen dann händisch gelöst werden!
+
+> Das git-Log sieht hier irgendwann ziemlich grausam aus. Dies ist aber auch dem geschuldet, das es noch ein `main` Branch gibt.
+> Normalerweise hat mein kein Branch mit einem und einen Branch mit zwei Fehlern. Der Branch `zwei` soll eigentlich nur den `main` Branch simulieren. Aber da es noch einen `main` Branch gibt, wird das Log sehr lang.
+> Dann kommt noch hinzu, das es zwischen dem Commit des ersten Fehlers und dem neusten Commit in `zwei` viele Commits gibt. Diese werden bei einem Rebase neu angelegt und das in einen dritten Branch `fix`... Das bläht das Log noch mehr auf.
+> Im Normalfalls sollten es zwischen dem Fehlerhaften Commit und dem zeitlich neusten nur wenige Commits geben.
+
